@@ -1,38 +1,31 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.bricks {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+.brick {
+  margin-left: 2px;
+  width: 90px;
+  height: 25px;
+  background-color: red;
 }
 
-.App-link {
-  color: #61dafb;
+.player {
+  width: 90px;
+  height: 25px;
+  position: absolute;
+  background: green;
+  bottom: 50px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ball {
+  width: 25px;
+  height: 25px;
+  background: blue;
+  border-color: blue;;
+  position: absolute;
+  left: 40px;
+  top: 100px;
+}
+
+.game-area {
+  height: 100vh;
 }
