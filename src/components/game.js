@@ -2,18 +2,25 @@ import React, {useState, useEffect, useRef} from 'react';
 
 import Ball from './ball';
 import Player from './player';
-import Brick from './brick';
-
-
-const BRICKS = [1,1,1,1,1,1,1,1,1,1];
+import Bricks from './bricks';
 
 const WIDTH = 200;
 const player_velocity = 1;
 
+const loadBricks = () => {
+  let bricks = [];
+  for(let i =0; i < 10; i++) {
+    bricks.push({
+      id: i,
+      value: 1
+    });
+  }
+  return bricks;
+}
 export default function Game(props) {
   const requestRef = useRef(undefined);
   const gameAreaRef = useRef(undefined);
-  const [bricks, setBricks] = useState(BRICKS);
+  const [bricks, setBricks] = useState(() => loadBricks());
 
   const [player, setPlayer] = useState({
       x: 90, 
@@ -23,7 +30,12 @@ export default function Game(props) {
   });
                 
   const [ball, setBall] = useState({
-    x: 150, y: 50, vx: 3, vy: 3, dir: 1
+    x: 150, 
+    y: 50, 
+    vx: 3, 
+    vy: 3, 
+    width: 25, 
+    height: 25
   });
 
   const [dir, setDir] = useState(1);
@@ -43,6 +55,11 @@ export default function Game(props) {
     });
     
     moveBall();
+    checkCollision();
+  }
+
+  const checkCollision = () => {
+
   }
 
   // undo comment
@@ -53,6 +70,7 @@ export default function Game(props) {
 
   const ballDirYRef = useRef(1);
   const ballDirXRef = useRef(1);
+
   const moveBall = () => {
     setBall(b => {
       if (b.y > gameAreaRef.current.offsetHeight) {
@@ -61,7 +79,7 @@ export default function Game(props) {
         ballDirYRef.current = 1;
       }
 
-      if (b.x > gameAreaRef.current.offsetWidth) {
+      if (b.x > gameAreaRef.current.offsetWidth-10) {
         ballDirXRef.current = -1;
       } else if (b.x < 10) {
         ballDirXRef.current = 1;
@@ -113,15 +131,10 @@ export default function Game(props) {
     <div className="game-area" ref={gameAreaRef}
       onKeyDown = {onKeyDown}  tabIndex="0" >
       <h2>BRICKS GAME</h2>
-      <div className="bricks">
-      {
-        bricks.map((b,i) => {
-          return <Brick key={i} />
-        })
-      }
-      </div>
+      <Bricks state={bricks} />
       <Ball state={ball} />
       <Player state={player} />
     </div>
   )
+
 }

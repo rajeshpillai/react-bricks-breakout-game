@@ -4,7 +4,9 @@ import React from 'react';
 export default function Ball({state}) {
   const style = {
     x: state.x,
-    y: state.y
+    y: state.y,
+    w: state.width,
+    h: state.height
   }
   let ballPos = {
     left: state.x + "px",

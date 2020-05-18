@@ -28,4 +28,6 @@
 
 .game-area {
   height: 100vh;
+  width: 800px;
+  border: 1px solid blue;
 }
