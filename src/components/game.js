@@ -12,7 +12,9 @@ const loadBricks = () => {
   for(let i =0; i < 10; i++) {
     bricks.push({
       id: i,
-      value: 1
+      value: 1,
+      width: 90,
+      height: 25
     });
   }
   return bricks;
@@ -26,7 +28,9 @@ export default function Game(props) {
       x: 90, 
       y: 0, 
       vx: 1, 
-      dir: 1
+      dir: 1,
+      height: 90,
+      width: 25
   });
                 
   const [ball, setBall] = useState({
@@ -40,8 +44,6 @@ export default function Game(props) {
 
   const [dir, setDir] = useState(1);
   const [ballDir, setBallDir] = useState(1);
-
-  console.log("main: ball: ", ball);
 
 
   const loop = (etime) => {
@@ -58,8 +60,23 @@ export default function Game(props) {
     checkCollision();
   }
 
-  const checkCollision = () => {
+  const intersect = (src, other) =>{
+    if (other == undefined) return false;
+    return src.y + src.height > other.y &&
+      src.y < other.y + other.height &&
+      src.x + src.width > other.x &&
+      src.x < other.x + other.width;
+  }
 
+  const checkCollision = () => {
+    for(let i = 0; i < bricks.length; i++) {
+      let collide = intersect(bricks[i], ball);
+      console.log("collide: ", collide);
+      if (collide) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // undo comment
