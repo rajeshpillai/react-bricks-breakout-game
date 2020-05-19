@@ -10,7 +10,9 @@ export default function Ball({state}) {
   }
   let ballPos = {
     left: state.x + "px",
-    top: state.y + "px"
+    top: state.y + "px",
+    width: state.width + "px",
+    height: state.height + "px"
   }
   return (
     <div className="ball" style={ballPos}></div>

@@ -14,7 +14,10 @@ const loadBricks = () => {
       id: i,
       value: 1,
       width: 90,
-      height: 25
+      height: 25,
+      x: 0,
+      y: 0,
+      show: true
     });
   }
   return bricks;
@@ -22,7 +25,12 @@ const loadBricks = () => {
 export default function Game(props) {
   const requestRef = useRef(undefined);
   const gameAreaRef = useRef(undefined);
+  const ballDirYRef = useRef(1);
+  const ballDirXRef = useRef(1);
+
   const [bricks, setBricks] = useState(() => loadBricks());
+  const [pause, togglePause] = useState(false);
+  const [score, setScore] = useState(0);
 
   const [player, setPlayer] = useState({
       x: 90, 
@@ -35,7 +43,7 @@ export default function Game(props) {
                 
   const [ball, setBall] = useState({
     x: 150, 
-    y: 50, 
+    y: 40, 
     vx: 3, 
     vy: 3, 
     width: 25, 
@@ -45,54 +53,94 @@ export default function Game(props) {
   const [dir, setDir] = useState(1);
   const [ballDir, setBallDir] = useState(1);
 
+   // one time
+   useEffect(() => {
+    let x = 0;
+    let updatedBricks = bricks.map((b,i) => {
+      b.x = x;
+      x+= b.width;
+      x+= 2; //margin
+      return b;
+    });
+    setBricks(updatedBricks);
+  },[]);
+
+  // For animation frame
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(loop);
+    return () => window.cancelAnimationFrame(requestRef.current);
+  }, [pause]);
+
+   // Ball to brick collision
+   useEffect(() => {
+    let b = checkBallToBrickCollision();
+    console.log("target: ", b);
+    if (b === false) return;
+    const updateIndex = b.index;
+    const updateItem = b.target;
+    updateItem.show = false;
+
+    let updated = [
+      ...bricks.slice(0, updateIndex),
+      {...updateItem},
+      ...bricks.slice(updateIndex + 1)
+    ];
+
+    ballDirYRef.current = ballDirYRef.current * -1;
+
+    setBricks(updated);
+    setScore(s => s + 1);
+  },[ball])
 
   const loop = (etime) => {
+    if (pause) {
+      requestRef.current = window.requestAnimationFrame(loop);
+      return;
+    }
     requestRef.current = window.requestAnimationFrame(loop);
-    
+      
     setPlayer(p => {
         return {
           ...p,
           x: Math.min(Math.max(p.x + p.vx, 0), gameAreaRef.current.offsetWidth-90)       
         }
     });
-    
     moveBall();
-    checkCollision();
   }
+
+ 
 
   const intersect = (src, other) =>{
     if (other == undefined) return false;
+    // console.log("src:other:", src, other);
     return src.y + src.height > other.y &&
       src.y < other.y + other.height &&
       src.x + src.width > other.x &&
       src.x < other.x + other.width;
   }
 
-  const checkCollision = () => {
+  const checkBallToBrickCollision = () => {
     for(let i = 0; i < bricks.length; i++) {
       let collide = intersect(bricks[i], ball);
-      console.log("collide: ", collide);
       if (collide) {
-        return true;
+        console.log("collide: ", collide);
+        return {
+          index: i, 
+          target: bricks[i]
+        }
       }
     }
     return false;
   }
 
-  // undo comment
-  useEffect(() => {
-    requestRef.current = requestAnimationFrame(loop);
-    return () => window.cancelAnimationFrame(requestRef.current);
-  }, []);
-
-  const ballDirYRef = useRef(1);
-  const ballDirXRef = useRef(1);
+ 
+ 
 
   const moveBall = () => {
     setBall(b => {
       if (b.y > gameAreaRef.current.offsetHeight) {
         ballDirYRef.current = -1;
-      } else if (b.y < 10) {
+      } else if (b.y < 2) {
         ballDirYRef.current = 1;
       }
 
@@ -106,7 +154,8 @@ export default function Game(props) {
         x: b.x + b.vx * ballDirXRef.current,
         y: b.y + b.vy * ballDirYRef.current
       }
-    })
+    });
+
   }
 
   const movePlayer = (dir) => {
@@ -137,17 +186,21 @@ export default function Game(props) {
   // not working
   const onKeyDown = (e) => {
     // left-37, up->38, right-39, down->40
+    console.log("key: ",e.keyCode);
     if (e.keyCode == 37) {
       movePlayer(-1);
     } else if (e.keyCode == 39) {
       movePlayer(1);
-    } 
+    } else if (e.keyCode ==80) {  // 'p' key
+      togglePause(p => !p);
+    }
   }
     
   return (
     <div className="game-area" ref={gameAreaRef}
       onKeyDown = {onKeyDown}  tabIndex="0" >
       <h2>BRICKS GAME</h2>
+      <h2>{score}</h2>
       <Bricks state={bricks} />
       <Ball state={ball} />
       <Player state={player} />

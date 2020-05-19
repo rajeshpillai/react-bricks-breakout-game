@@ -6,12 +6,13 @@
   width: 90px;
   height: 25px;
   background-color: red;
+  position: absolute;
 }
 
 .player {
+  position: absolute;
   width: 90px;
   height: 25px;
-  position: absolute;
   background: green;
   bottom: 50px;
 }
@@ -27,6 +28,7 @@
 }
 
 .game-area {
+  position: absolute;
   height: 100vh;
   width: 800px;
   border: 1px solid blue;
