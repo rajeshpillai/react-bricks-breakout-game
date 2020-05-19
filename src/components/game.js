@@ -121,6 +121,7 @@ export default function Game(props) {
 
   const checkBallToBrickCollision = () => {
     for(let i = 0; i < bricks.length; i++) {
+      if (!bricks[i].show) continue;
       let collide = intersect(bricks[i], ball);
       if (collide) {
         console.log("collide: ", collide);
