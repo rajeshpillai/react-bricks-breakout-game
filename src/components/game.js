@@ -8,53 +8,32 @@ import GameMessage from './game-message';
 const WIDTH = 800;
 const BRICK_WIDTH = 100;
 const BRICK_HEIGHT = 25;
-const player_velocity = 1;
-const NUMBER_OF_BRICKS = WIDTH / BRICK_WIDTH;
 
-const loadBricks = () => {
-  let bricks = [];
-  
-  //b.x = x;
-  //x+= b.width;
-  let x = 0;
-  for(let i =0; i < NUMBER_OF_BRICKS; i++) {
-    let b = ({
-      id: i,
-      value: 1,
-      width: BRICK_WIDTH,
-      height: BRICK_HEIGHT,
-      x: x,
-      y: 0,
-      show: true
-    });
-    bricks.push(b);
-    x+= b.width;
-  }
-  return bricks;
-}
+
 
 export default function Game(props) {
   const requestRef = useRef(undefined);
   const gameAreaRef = useRef(undefined);
   const ballDirYRef = useRef(1);
   const ballDirXRef = useRef(1);
-
+  
   const [trialRun, setTrialRun] = useState(false);
   const [won, setWon] = useState(undefined);
   const [inprogress, toggleProgress] = useState(false);
   const [pause, togglePause] = useState(false);
   const [bricks, setBricks] = useState([]); // useState(() => loadBricks());
   const [score, setScore] = useState(0);
-
+  const [numberOfBricks, setBricksCount] = useState(5);
+  
   const [player, setPlayer] = useState({
-      x: 90, 
-      y: 500, 
-      vx: 1, 
-      dir: 1,
-      height: 25,
-      width: 90
+    x: 90, 
+    y: 500, 
+    vx: 1, 
+    dir: 1,
+    height: 25,
+    width: 90
   });
-                
+  
   const [ball, setBall] = useState({
     x: 150, 
     y: 40, 
@@ -64,6 +43,38 @@ export default function Game(props) {
     height: 25
   });
 
+  
+  const loadBricks = () => {
+    let width =  gameAreaRef.current.offsetWidth;
+    
+    const NUMBER_OF_BRICKS = 10; // width / BRICK_WIDTH;
+
+    let brickwidth = width / NUMBER_OF_BRICKS;
+
+    console.log(`Game width ${width} - Brick Width ${brickwidth}`);
+
+    setBricksCount(NUMBER_OF_BRICKS);
+
+    // size 500   width: ?  -> 5  (bricks)   500/5 = 100w        800/5 = 150w   
+
+    let bricks = [];
+    let x = 0;
+    for(let i =0; i < NUMBER_OF_BRICKS; i++) {
+      let b = ({
+        id: i,
+        value: 1,
+        width: brickwidth,
+        height: BRICK_HEIGHT,
+        x: x,
+        y: 0,
+        show: true
+      });
+      bricks.push(b);
+      x+= b.width;
+    }
+    return bricks;
+  }
+  
 
   const startGame = () => {
     setBricks(loadBricks());
@@ -144,7 +155,7 @@ export default function Game(props) {
 
   // Determine winner
   useEffect(() => {
-    if (score >= NUMBER_OF_BRICKS) {
+    if (score >= numberOfBricks) {
       setWon(true);
       toggleProgress(false);
     }
