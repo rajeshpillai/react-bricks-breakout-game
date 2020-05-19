@@ -1,3 +1,7 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
 .game-area {
   position: absolute;
   height: 100vh;
