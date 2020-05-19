@@ -17,6 +17,13 @@
   text-align: center;;
 }
 
+.score {
+ margin: 20% auto;
+ text-align: center;
+ font-size: 3em;
+ color: #ddd; 
+}
+
 .bricks {
   display: flex;
   padding: 0;
@@ -29,6 +36,8 @@
   background-color: sandybrown;
   position: absolute;
 }
+
+
 
 .hidden {
   display: none;

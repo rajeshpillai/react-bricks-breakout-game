@@ -304,7 +304,7 @@ export default function Game(props) {
       onKeyUp = {onKeyUp}
       onClick={gameStart}
       tabIndex="0" >
-      <h2>{score}</h2>
+      <h2 className="score">{score}</h2>
       <GameMessage state={inprogress} won={won} />
       <Bricks state={bricks} />
       <Ball state={ball} />

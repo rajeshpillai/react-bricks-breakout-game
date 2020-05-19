@@ -14,7 +14,7 @@ export default function Brick({brick}) {
     // visibility: brick.show ? "visible" : "hidden"
   }
 
-  const classes = brick.show ? "brick" : "brick animate__animated  animate__jackInTheBox";
+  const classes = brick.show ? "brick" : "brick animate__animated  animate__rollOut";
 
   useEffect(() => {
     useBrickRef.current.addEventListener('animationend', () => {
