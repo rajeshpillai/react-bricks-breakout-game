@@ -13,31 +13,38 @@ const NUMBER_OF_BRICKS = WIDTH / BRICK_WIDTH;
 
 const loadBricks = () => {
   let bricks = [];
+  
+  //b.x = x;
+  //x+= b.width;
+  let x = 0;
   for(let i =0; i < NUMBER_OF_BRICKS; i++) {
-    bricks.push({
+    let b = ({
       id: i,
       value: 1,
       width: BRICK_WIDTH,
       height: BRICK_HEIGHT,
-      x: 0,
+      x: x,
       y: 0,
       show: true
     });
+    bricks.push(b);
+    x+= b.width;
   }
   return bricks;
 }
+
 export default function Game(props) {
   const requestRef = useRef(undefined);
   const gameAreaRef = useRef(undefined);
   const ballDirYRef = useRef(1);
   const ballDirXRef = useRef(1);
 
-  const [bricks, setBricks] = useState(() => loadBricks());
-  const [score, setScore] = useState(0);
   const [trialRun, setTrialRun] = useState(false);
   const [won, setWon] = useState(undefined);
   const [inprogress, toggleProgress] = useState(false);
   const [pause, togglePause] = useState(false);
+  const [bricks, setBricks] = useState([]); // useState(() => loadBricks());
+  const [score, setScore] = useState(0);
 
   const [player, setPlayer] = useState({
       x: 90, 
@@ -57,27 +64,35 @@ export default function Game(props) {
     height: 25
   });
 
-  // one time
-  useEffect(() => {
-    let x = 0;
-    let updatedBricks = bricks.map((b,i) => {
-      b.x = x;
-      x+= b.width;
-      //x+= 2; //margin
-      return b;
+
+  const startGame = () => {
+    setBricks(loadBricks());
+    toggleProgress(true);
+    setWon(undefined);
+    setScore(0);
+    setTrialRun(false);
+    togglePause(false);
+    setBall({
+      x: 150, 
+      y: 40, 
+      vx: 3, 
+      vy: 3, 
+      width: 25, 
+      height: 25
     });
-    setBricks(updatedBricks);
-  },[]);
+  }
 
   // For animation frame
   useEffect(() => {
-    if (inprogress && !pause) {
+    console.log(`game status ${inprogress}- paused - ${pause}`);
+    if (inprogress){
       requestRef.current = requestAnimationFrame(loop);
+    } else {
+      window.cancelAnimationFrame(requestRef.current);
     }
     return () => window.cancelAnimationFrame(requestRef.current);
-  }, [pause, inprogress]);
+  }, [inprogress]);
 
-  
 
   // Ball to brick collision
   useEffect(() => {
@@ -129,18 +144,13 @@ export default function Game(props) {
     if (collide) {
       console.log("Player:Ball:Collide: ", collide);
       ballDirYRef.current = ballDirYRef.current * -1;
-      // setBall(b => {
-      //   return {
-      //     ...b,
-      //     y: b.y + b.vy * -1
-      //   }
-      // });
     }
   }, [player])
 
   const loop = (etime) => {
+    console.log("PAUSE: ",pause);
     if (pause) {
-      requestRef.current = window.requestAnimationFrame(loop);
+      //requestRef.current = window.requestAnimationFrame(loop);
       return;
     }
     requestRef.current = window.requestAnimationFrame(loop);
@@ -252,7 +262,8 @@ export default function Game(props) {
     
   const gameStart = (e) => {
     if (!inprogress) {
-      toggleProgress(true);
+     
+      startGame();
     }
   }
   return (
