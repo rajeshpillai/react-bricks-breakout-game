@@ -8,13 +8,16 @@
 
 .bricks {
   display: flex;
+  padding: 0;
+  margin:0;
 }
 .brick {
-  margin-left: 2px;
+  box-sizing: border-box;
   width: 90px;
   height: 25px;
-  background-color: red;
+  background-color: sandybrown;
   position: absolute;
+  margin: 2px;
 }
 
 .player {

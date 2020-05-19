@@ -33,10 +33,11 @@ export default function Game(props) {
   const ballDirXRef = useRef(1);
 
   const [bricks, setBricks] = useState(() => loadBricks());
-  const [pause, togglePause] = useState(false);
   const [score, setScore] = useState(0);
   const [trialRun, setTrialRun] = useState(false);
   const [won, setWon] = useState(undefined);
+  const [inprogress, toggleProgress] = useState(false);
+  const [pause, togglePause] = useState(false);
 
   const [player, setPlayer] = useState({
       x: 90, 
@@ -62,7 +63,7 @@ export default function Game(props) {
     let updatedBricks = bricks.map((b,i) => {
       b.x = x;
       x+= b.width;
-      x+= 2; //margin
+      //x+= 2; //margin
       return b;
     });
     setBricks(updatedBricks);
@@ -70,15 +71,20 @@ export default function Game(props) {
 
   // For animation frame
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(loop);
+    if (inprogress && !pause) {
+      requestRef.current = requestAnimationFrame(loop);
+    }
     return () => window.cancelAnimationFrame(requestRef.current);
-  }, [pause]);
+  }, [pause, inprogress]);
+
+  
 
   // Ball to brick collision
   useEffect(() => {
     // Check if game lost
     if (ball.y >= player.y + player.height) {
       setWon(false);
+      toggleProgress(false);
       return;
     }
     let b = checkBallToBrickCollision();
@@ -113,6 +119,7 @@ export default function Game(props) {
   useEffect(() => {
     if (score >= NUMBER_OF_BRICKS) {
       setWon(true);
+      toggleProgress(false);
     }
   }, [score])
 
@@ -243,14 +250,20 @@ export default function Game(props) {
     } 
   }
     
+  const gameStart = (e) => {
+    if (!inprogress) {
+      toggleProgress(true);
+    }
+  }
   return (
     <div className="game-area" ref={gameAreaRef}
       onKeyDown = {onKeyDown}  
       onKeyUp = {onKeyUp}
+      onClick={gameStart}
       tabIndex="0" >
       <h2>BRICKS GAME</h2>
       <h2>{score}</h2>
-      <GameMessage state={won} />
+      <GameMessage state={inprogress} won={won} />
       <Bricks state={bricks} />
       <Ball state={ball} />
       <Player state={player} />
