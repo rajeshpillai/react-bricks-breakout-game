@@ -279,7 +279,12 @@ export default function Game(props) {
       movePlayer(0);
     } else if (e.keyCode == 39) {
       movePlayer(0);
-    } 
+    } else if (e.keyCode === 32) {
+        // space key
+        if (!inprogress) {
+          startGame();
+        }
+    }
   }
     
   const gameStart = (e) => {
@@ -294,7 +299,6 @@ export default function Game(props) {
       onKeyUp = {onKeyUp}
       onClick={gameStart}
       tabIndex="0" >
-      <h2>BRICKS GAME</h2>
       <h2>{score}</h2>
       <GameMessage state={inprogress} won={won} />
       <Bricks state={bricks} />

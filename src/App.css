@@ -5,7 +5,7 @@
 }
 .game-area {
   position: absolute;
-  height: 100vh;
+  height: 98vh;
   min-width: 600px;
   border: 1px solid blue;
   margin: 0 auto;
