@@ -27,7 +27,7 @@ export default function Game(props) {
   
   const [player, setPlayer] = useState({
     x: 90, 
-    y: 500, 
+    y: 550, 
     vx: 1, 
     dir: 1,
     height: 25,
@@ -299,7 +299,7 @@ export default function Game(props) {
     }
   }
   return (
-    <div className="game-area" ref={gameAreaRef}
+    <div className="game-area animate__animated  animate__zoomInLeft" ref={gameAreaRef}
       onKeyDown = {onKeyDown}  
       onKeyUp = {onKeyUp}
       onClick={gameStart}

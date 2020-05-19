@@ -5,10 +5,16 @@
 }
 .game-area {
   position: absolute;
-  height: 98vh;
-  min-width: 600px;
+  height: 600px;
+  width: 600px;
   border: 1px solid blue;
   margin: 0 auto;
+}
+
+.game-start-info {
+  font-size: 3em;
+  color: #ddd;
+  text-align: center;;
 }
 
 .bricks {
@@ -24,12 +30,15 @@
   position: absolute;
 }
 
+.hidden {
+  display: none;
+}
+
 .player {
   position: absolute;
   width: 90px;
   height: 25px;
   background-color: green;
-  top: 500px;
 }
 
 .ball {

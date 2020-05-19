@@ -11,7 +11,7 @@ export default function GameMessage({state, won}) {
   return (
     <div>
       <h1 className="game-message">{won !== undefined && message}</h1>
-      {(!state) && <h2>Touch/Click or Press space to start the game again...</h2>}
+      {(!state) && <h2 className="game-start-info">Touch/Click or Press space to start the game again...</h2>}
     </div>
   );
 }

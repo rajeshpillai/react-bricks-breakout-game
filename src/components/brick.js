@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 
 export default function Brick({brick}) {
+  const useBrickRef = useRef();
   const style = {
     left: brick.x,
     top: brick.y,
@@ -9,12 +10,20 @@ export default function Brick({brick}) {
     position: "absolute",
     backgroundColor: brick.show ? "sandybrown" : "inherit",
     border: "2px solid red",
-    display: brick.show ? "block" : "none"
+    // display: brick.show ? "block" : "none"
     // visibility: brick.show ? "visible" : "hidden"
   }
 
+  const classes = brick.show ? "brick" : "brick animate__animated  animate__jackInTheBox";
+
+  useEffect(() => {
+    useBrickRef.current.addEventListener('animationend', () => {
+      useBrickRef.current.classList.add("hidden");
+    });
+  });
+
   return (
-    <div className="brick" style={style}>
+    <div className={classes} style={style} ref={useBrickRef}>
     </div>
   )
 } 

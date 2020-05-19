@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import './animate.css';
 import Game from './components/game';
 
 function App() {
