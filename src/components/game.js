@@ -82,7 +82,7 @@ export default function Game(props) {
     });
   }
 
-  // For animation frame
+  // For starting game
   useEffect(() => {
     console.log(`game status ${inprogress}- paused - ${pause}`);
     if (inprogress){
@@ -92,6 +92,18 @@ export default function Game(props) {
     }
     return () => window.cancelAnimationFrame(requestRef.current);
   }, [inprogress]);
+
+  // For pause/unpause
+  useEffect(() => {
+    console.log(`game status ${inprogress}- paused - ${pause}`);
+    if (pause) {
+      window.cancelAnimationFrame(requestRef.current);
+    } else {
+      if (inprogress) {
+        requestRef.current = window.requestAnimationFrame(loop);
+      }
+    }
+  }, [pause]);
 
 
   // Ball to brick collision
@@ -150,7 +162,6 @@ export default function Game(props) {
   const loop = (etime) => {
     console.log("PAUSE: ",pause);
     if (pause) {
-      //requestRef.current = window.requestAnimationFrame(loop);
       return;
     }
     requestRef.current = window.requestAnimationFrame(loop);
