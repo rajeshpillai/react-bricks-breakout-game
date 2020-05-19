@@ -3,6 +3,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import Ball from './ball';
 import Player from './player';
 import Bricks from './bricks';
+import GameMessage from './game-message';
 
 const WIDTH = 800;
 const BRICK_WIDTH = 100;
@@ -34,6 +35,8 @@ export default function Game(props) {
   const [bricks, setBricks] = useState(() => loadBricks());
   const [pause, togglePause] = useState(false);
   const [score, setScore] = useState(0);
+  const [trialRun, setTrialRun] = useState(false);
+  const [won, setWon] = useState(undefined);
 
   const [player, setPlayer] = useState({
       x: 90, 
@@ -73,8 +76,14 @@ export default function Game(props) {
 
   // Ball to brick collision
   useEffect(() => {
+    // Check if game lost
+    if (ball.y >= player.y + player.height) {
+      setWon(false);
+      return;
+    }
     let b = checkBallToBrickCollision();
     if (b === false) return;
+
     const updateIndex = b.index;
     const updateItem = b.target;
     updateItem.show = false;
@@ -89,7 +98,23 @@ export default function Game(props) {
 
     setBricks(updated);
     setScore(s => s + 1);
+
   },[ball])
+
+  //  Won/Lost
+  useEffect(()=> {
+    if (won === undefined) return;
+    if (won === false) {
+      window.cancelAnimationFrame(requestRef.current)  ;
+    } 
+  },[won])
+
+  // Determine winner
+  useEffect(() => {
+    if (score >= NUMBER_OF_BRICKS) {
+      setWon(true);
+    }
+  }, [score])
 
   // Player to ball collision
   useEffect(() => {
@@ -225,6 +250,7 @@ export default function Game(props) {
       tabIndex="0" >
       <h2>BRICKS GAME</h2>
       <h2>{score}</h2>
+      <GameMessage state={won} />
       <Bricks state={bricks} />
       <Ball state={ball} />
       <Player state={player} />
