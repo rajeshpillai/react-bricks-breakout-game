@@ -1,13 +1,12 @@
 import React from 'react';
 export default function Player({state}) {
-  const style = {
-    x: state.x,
-    y: state.y
-  }
-  let playerPos= {
-    left: state.x + "px"
+  let style= {
+    left: state.x + "px",
+    width: state.width + "px",
+    height: state.height + "px",
+    top: state.y + "px"
   }
   return (
-    <div className="player" style={playerPos}></div>
+    <div className="player" style={style}></div>
   )
 }

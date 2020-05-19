@@ -7,7 +7,7 @@ export default function Brick({brick}) {
     width: brick.width,
     height: brick.height,
     position: "absolute",
-    backgroundColor: brick.show ? "yellow" : "inherit",
+    backgroundColor: brick.show ? "red" : "inherit",
     display: brick.show ? "block" : "none"
     // visibility: brick.show ? "visible" : "hidden"
   }
