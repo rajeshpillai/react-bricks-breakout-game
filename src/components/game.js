@@ -294,7 +294,6 @@ export default function Game(props) {
     
   const gameStart = (e) => {
     if (!inprogress) {
-     
       startGame();
     }
   }
@@ -307,7 +306,7 @@ export default function Game(props) {
       <h2 className="score">{score}</h2>
       <GameMessage state={inprogress} won={won} />
       <Bricks state={bricks} />
-      <Ball state={ball} />
+      <Ball state={ball} won={won}  />
       <Player state={player} />
     </div>
   )
