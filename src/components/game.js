@@ -24,6 +24,7 @@ export default function Game(props) {
   const [bricks, setBricks] = useState([]); // useState(() => loadBricks());
   const [score, setScore] = useState(0);
   const [numberOfBricks, setBricksCount] = useState(5);
+  const [ballCollide, setBallCollide] = useState(false);
   
   const [player, setPlayer] = useState({
     x: 90, 
@@ -37,8 +38,8 @@ export default function Game(props) {
   const [ball, setBall] = useState({
     x: 150, 
     y: 40, 
-    vx: 3, 
-    vy: 3, 
+    vx: 4, 
+    vy: 4, 
     width: 25, 
     height: 25
   });
@@ -172,6 +173,7 @@ export default function Game(props) {
     if (collide) {
       console.log("Player:Ball:Collide: ", collide);
       ballDirYRef.current = ballDirYRef.current * -1;
+      setBallCollide(c => !c);
     }
   }, [player])
 
@@ -307,7 +309,7 @@ export default function Game(props) {
       <GameMessage state={inprogress} won={won} />
       <Bricks state={bricks} />
       <Ball state={ball} won={won}  />
-      <Player state={player} />
+      <Player state={player} collide ={ballCollide} />
     </div>
   )
 
