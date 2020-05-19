@@ -74,7 +74,7 @@ export default function Game(props) {
     }
     return bricks;
   }
-  
+
 
   const startGame = () => {
     setBricks(loadBricks());
@@ -92,6 +92,11 @@ export default function Game(props) {
       height: 25
     });
   }
+
+  // First load
+  useEffect(() => {
+    setBricks(loadBricks());
+  },[])
 
   // For starting game
   useEffect(() => {
